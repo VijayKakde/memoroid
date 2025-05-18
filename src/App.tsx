@@ -35,11 +35,11 @@ function App() {
       >
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="dashboard" element={<Dashboard />} />
+        <Route path="profile" element={<Profile />} />
         <Route path="create" element={<CreateFlashcard />} />
         <Route path="edit/:id" element={<EditFlashcard />} />
         <Route path="review" element={<ReviewFlashcard />} />
         <Route path="stats" element={<Stats />} />
-        <Route path="profile" element={<Profile />} />
       </Route>
     </Routes>
   );

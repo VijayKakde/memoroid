@@ -76,7 +76,7 @@ const Signup: React.FC = () => {
           <path d="M4 11C4 9.89543 4.89543 9 6 9H18C19.1046 9 20 9.89543 20 11V13.5C20 14.6046 19.1046 15.5 18 15.5H6C4.89543 15.5 4 14.6046 4 13.5V11Z" fill="#10B981"/>
           <path d="M4 18C4 16.8954 4.89543 16 6 16H18C19.1046 16 20 16.8954 20 18V20C20 21.1046 19.1046 22 18 22H6C4.89543 22 4 21.1046 4 20V18Z" fill="#F59E0B"/>
         </svg>
-        <h1 className="text-3xl font-bold text-indigo-600">SmartFlash</h1>
+        <h1 className="text-3xl font-bold text-indigo-600">Memoroid</h1>
       </div>
       
       <div className="w-full max-w-md card">

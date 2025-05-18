@@ -1,5 +1,5 @@
 /*
-  # Initial schema setup for SmartFlash
+  # Initial schema setup for Memoroid
 
   1. New Tables
     - `flashcards`: Stores user flashcards with spaced repetition metadata

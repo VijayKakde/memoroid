@@ -1,11 +1,34 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Menu, X, LayoutDashboard, Plus, Layers, BarChart, LogOut } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { supabase } from '../lib/supabase';
 
 const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, signOut } = useAuth();
+  const [fullName, setFullName] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (!user) return;
+      
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('full_name')
+          .eq('id', user.id)
+          .single();
+
+        if (error) throw error;
+        setFullName(data.full_name);
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      }
+    };
+
+    fetchProfile();
+  }, [user]);
 
   const navItems = [
     { path: '/dashboard', icon: <LayoutDashboard size={20} />, label: 'Dashboard' },
@@ -18,6 +41,20 @@ const Header: React.FC = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
+  const getUserInitial = () => {
+    if (fullName) {
+      return fullName.charAt(0).toUpperCase();
+    }
+    return user?.email ? user.email.charAt(0).toUpperCase() : 'U';
+  };
+
+  const getUserDisplayName = () => {
+    if (fullName) {
+      return fullName;
+    }
+    return user?.email ? user.email.split('@')[0] : 'User';
+  };
+
   return (
     <header className="bg-white border-b border-gray-200">
       <div className="flex justify-between items-center px-4 py-3 md:hidden">
@@ -27,7 +64,7 @@ const Header: React.FC = () => {
             <path d="M4 11C4 9.89543 4.89543 9 6 9H18C19.1046 9 20 9.89543 20 11V13.5C20 14.6046 19.1046 15.5 18 15.5H6C4.89543 15.5 4 14.6046 4 13.5V11Z" fill="#10B981"/>
             <path d="M4 18C4 16.8954 4.89543 16 6 16H18C19.1046 16 20 16.8954 20 18V20C20 21.1046 19.1046 22 18 22H6C4.89543 22 4 21.1046 4 20V18Z" fill="#F59E0B"/>
           </svg>
-          <h1 className="text-xl font-bold text-indigo-600">SmartFlash</h1>
+          <h1 className="text-xl font-bold text-indigo-600">Memoroid</h1>
         </div>
         <button
           onClick={toggleMobileMenu}
@@ -77,17 +114,17 @@ const Header: React.FC = () => {
 
       <div className="hidden md:flex justify-between items-center px-6 py-4">
         <h2 className="text-xl font-semibold text-gray-800">
-          {user ? `Welcome back${user.user_metadata?.name ? ', ' + user.user_metadata.name : ''}!` : ''}
+          {user ? `Welcome back${fullName ? ', ' + fullName : ''}!` : ''}
         </h2>
         <div className="flex items-center space-x-4">
           {user && (
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center">
                 <span className="font-medium text-sm">
-                  {user.email ? user.email.charAt(0).toUpperCase() : 'U'}
+                  {getUserInitial()}
                 </span>
               </div>
-              <span className="text-sm text-gray-700">{user.email}</span>
+              <span className="text-sm text-gray-700">{getUserDisplayName()}</span>
             </div>
           )}
         </div>
